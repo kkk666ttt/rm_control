@@ -485,7 +485,9 @@ public:
          (track_data_.accel > target_acceleration_tolerance_)) ||
         (!suggest_fire_.data && armor_type_ == rm_msgs::StatusChangeRequest::ARMOR_OUTPOST_BASE))
       if (msg_.mode == rm_msgs::ShootCmd::PUSH)
+      {
         setMode(rm_msgs::ShootCmd::READY);
+      }
   }
   void sendCommand(const ros::Time& time) override
   {
@@ -602,6 +604,11 @@ public:
   }
   void setZero() override{};
   HeatLimit* heat_limit_{};
+
+  int getShootMode()
+  {
+    return msg_.mode;
+  }
 
 private:
   double speed_10_{}, speed_15_{}, speed_16_{}, speed_18_{}, speed_30_{}, speed_des_{}, speed_limit_{};
@@ -902,7 +909,7 @@ public:
   }
   void switchCameraRight()
   {
-    msg_.data = camera2_name_;
+    msg_.data = msg_.data == camera1_name_ ? camera2_name_ : camera1_name_;
   }
   void sendCommand(const ros::Time& time) override
   {
